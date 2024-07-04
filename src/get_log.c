@@ -9,7 +9,7 @@
 int Log_memory(int line, int elements, float *a) {
 
 	volatile int j;
-	if (elements > 6 || line > 2000) { //要素数2000
+	if (elements > 6 || line > 1000) { //要素数 1000
 
 	} else {
 		for (j = 0; j < elements; j++) {
@@ -22,7 +22,7 @@ int Log_memory(int line, int elements, float *a) {
 int Log_output(int line, int elements) {
 
 	volatile int i, j;
-	if (elements > 6 || line > 2000) { //要素数7個以上, 2000行以上はエラー処理
+	if (elements > 6 || line > 1000) { //要素数7個以上, 1000行以上はエラー処理
 		PORTA.PODR.BIT.B3 = 1;
 		PORTA.PODR.BIT.B4 = 0;
 		PORTA.PODR.BIT.B6 = 1;
@@ -52,3 +52,15 @@ int Log_output(int line, int elements) {
 	return 0;
 }
 
+
+void get_logs(int log_time, float data1, float data2, float data3, float data4, float data5, float data6){
+	float Log[6] = { 0 };
+	Log[0] = data1;
+	Log[1] = data2;
+	Log[2] = data3;
+	Log[3] = data4;
+	Log[4] = data5;
+	Log[5] = data6;
+
+	Log_memory(log_time, 6, Log)
+}

@@ -9,7 +9,7 @@
 
 extern volatile int DkFlag, Dk_omega_Flag, Dk_omega_minas_Flag, Dk_END_Flag,
 		Slalom_Flag, turn_R_Flag, turn_L_Flag;
-extern volatile float Gyroomega, Gyrosita;
+extern volatile float Gyroomega, Gyrotheta;
 extern volatile float Vg, Xg;
 extern volatile float target_V, target_X, target_Accel, target_omega_V,
 		target_omega_X, target_omega_Accel;
@@ -316,7 +316,7 @@ void Ultra_pivot_turn(volatile float Xrad_all, volatile float Kaku_Acceleration,
 	Dk_omega_minas_Flag = 0;
 	Error_Reset();
 
-	Gyrosita = 0;
+	Gyrotheta = 0;
 	target_X = 0;
 	target_V = 0;
 	target_Accel = 0;
@@ -362,7 +362,7 @@ void Ultra_pivot_turn(volatile float Xrad_all, volatile float Kaku_Acceleration,
 		if (count_time
 				>= (int) (time_acceleration + time_const + time_deceleration)) {
 			target_omega_Accel = 0;
-			if (abs(Gyrosita) < Xrad_all) {
+			if (abs(Gyrotheta) < Xrad_all) {
 				PORTA.PODR.BIT.B3 = 1;
 				PORTA.PODR.BIT.B4 = 1;
 				PORTA.PODR.BIT.B6 = 1;
@@ -406,7 +406,7 @@ void Slalom(volatile float X_slalom_rad_all, volatile float Kaku_Acceleration,
 	}
 
 	turn_L_Flag = 1;
-	Gyrosita = 0;
+	Gyrotheta = 0;
 
 	Xp_slalom_kasoku = abs(
 			(V_slalom_max * V_slalom_max) / (2 * Kaku_Acceleration));//加速クロソイド区間に進む距離(角度)
@@ -491,7 +491,7 @@ void Ultra_pivot_Slalom(volatile float X_slalom_rad_all,
 	}
 	Slalom_Flag = 1;
 	turn_L_Flag = 1;
-	Gyrosita = 0;
+	Gyrotheta = 0;
 
 	/*加速にかかる時間 */
 	time_acceleration = abs(V_omega_max) * 1000 / abs(Kaku_Acceleration);
@@ -553,7 +553,7 @@ void Ultra_pivot_Slalom(volatile float X_slalom_rad_all,
 		if (count_time
 				>= (int) (time_acceleration + time_const + time_deceleration)) {
 			target_omega_Accel = 0;
-			if (abs(Gyrosita) < X_slalom_rad_all) {
+			if (abs(Gyrotheta) < X_slalom_rad_all) {
 
 			} else {
 				target_omega_V = 0;

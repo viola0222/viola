@@ -61,7 +61,7 @@ void Initialize(void) {
 	Vl = 0;
 //Gyroの測定の初期化
 	Gyroheikin = 0;
-	Gyrosita = 0;
+	Gyrotheta = 0;
 	addGyro = 0;
 	GyroFCount = 0;
 
@@ -365,13 +365,13 @@ void mode_choice(void) {
 //		while (PORT3.PIDR.BIT.B5 == 0)
 //			;
 		Comeback_Flag = 0;
-		minimum_path_walk(1500);
-
-//		Linear_motion(90, 5000, 500, 0, 500);
-//		while (Goal_Flag == 0) {
-//			Left_hands_getwall();
-//		}
-//		myprintf("Now Lefthand.\n");
+		Initialize();
+		Linear_motion(90, 5000, 500, 0, 500);
+		while (Goal_Flag == 0) {
+ 			Left_hands_getwall();
+		}
+// //		myprintf("Now Lefthand.\n");
+		Path_Generater();
 		break;
 
 	case Fast:
@@ -391,7 +391,7 @@ void mode_choice(void) {
 
 		Initialize();
 		Comeback_Flag = 0;
-		minimum_path_walk(1000);
+		minimum_path_walk(1500);
 		break;
 
 	case Map_export:

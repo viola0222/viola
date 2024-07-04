@@ -51,7 +51,7 @@ volatile int DkFlag, Dk_omega_Flag, Dk_omega_minas_Flag, Log_Flag, Cho_Flag,
 
 //verocity
 volatile float Vg, Vr, Vl, Xg, Xg_target, guruguru_X, addGyro, Gyroheikin,
-		Gyroomega, Gyrosita, ENComega, ENCsita;
+		Gyroomega, Gyrotheta, ENComega, ENCsita;
 
 volatile float ErrorG_I, ErrorG_P, ErroromegaG_I, ErroromegaG_P, ControlG,
 		ControlomegaG, ControlR, ControlL, ControlR_P, ControlL_P, ControlR_I,
@@ -211,36 +211,18 @@ void interrupt_cmt0(void) {
 		if (Log_Flag == 1) {
 			if (count_time % 2 == 0) {
 
-//				Log[0] = count_time;
-//				Log[1] = Gyroomega;
-//				Log[2] = Gyrosita;
-//				Log[3] = target_omega_V;
-//				Log[4] = target_omega_Accel;
-//				Log[5] = target_omega_X;
+				// get_logs(log_time, count_time, Gyroomega, Gyrotheta, target_omega_V,
+				// 		target_omega_Accel, target_omega_X);
 
-//				Log[0] = count_time;
-//				Log[1] = MLeft.val;
-//				Log[2] = MLeft.dif;
-//				Log[3] = MRight.val;
-//				Log[4] = MRight.dif;
-//				Log[5] = Centre.val;
+				// get_logs(log_time, count_time, MLeft.val, MLeft.dif, MRight.val, MRight.dif,
+				// 		Centre.val);
 
-				Log[0] = count_time;
-				Log[1] = Vg;
-				Log[2] = target_V;
-				Log[3] = Xg;
-				Log[4] = target_X;
-				Log[5] = Gyrosita;
+				// get_logs(log_time, count_time, Vg, target_V, Xg, target_X, Gyrotheta);
 
-//			Log[0] = count_time;
-//			Log[1] = MLeft.val;
-//			Log[2] = MLeft.dif;
-//			Log[3] = MRight.val;
-//			Log[4] = Centre.val;
-//			Log[5] = target_omega_V;
+				// get_logs(log_time, count_time, MLeft.val, MLeft.dif, MRight.val, Centre.val,
+				// 		target_omega_V);
 
-//				Log_memory(log_time, 6, Log);
-//				log_time++;
+				// log_time++;
 			}
 		}
 		PID_calc(target_V, 0);
@@ -248,21 +230,13 @@ void interrupt_cmt0(void) {
 	} else if (Dk_omega_Flag == 1) {
 		if (Log_Flag == 1) {
 			if (count_time % 2 == 0) {
+				// get_logs(log_time, count_time, Gyroomega, target_omega_V, Gyrotheta, target_omega_X,
+				// 		0.f);
 
-				Log[0] = count_time;
-				Log[1] = Gyroomega;
-				Log[2] = target_omega_V;
-				Log[3] = Gyrosita;
-				Log[4] = target_omega_X;
+				// get_logs(log_time, count_time, MLeft.val, Centre.dif, MRight.val, Gyrotheta,
+				// 		0.f);
 
-//			Log[0] = count_time;
-//			Log[1] = MLeft.val;
-//			Log[2] = Centre.val;
-//			Log[3] = MRight.val;
-//			Log[4] = Gyrosita;
-
-//				Log_memory(log_time, 6, Log);
-//				log_time++;
+				log_time++;
 			}
 		}
 
@@ -271,28 +245,20 @@ void interrupt_cmt0(void) {
 	} else if (Slalom_Flag == 1) {
 		if (Log_Flag == 1) {
 			if (count_time % 2 == 0) {
-				Log[0] = count_time;
-				Log[1] = Gyroomega;
-				Log[2] = Gyrosita;
-				Log[3] = target_omega_V;
-				Log[4] = target_omega_Accel;
-				Log[5] = target_omega_X;
+				// get_logs(log_time, count_time, Gyroomega, Gyrotheta, target_omega_V, target_omega_Accel,
+				// 		target_omega_X);
 
-//				Log_memory(log_time, 6, Log);
-//				log_time++;
+				log_time++;
 			}
 		}
 		PID_calc(target_V, target_omega_V);
 
 	} else if (Sake_Flag == 1) {
+		get_logs(log_time, count_time, ErrorG_P, ErrorG_I, ErroromegaG_P,
+				ErroromegaG_I, 0.f);
 
-		Log[0] = count_time;
-		Log[1] = ErrorG_P;
-		Log[2] = ErrorG_I;
-		Log[3] = ErroromegaG_P;
-		Log[4] = ErroromegaG_I;
+		log_time++;
 
-//		Log_memory(count_time, 5, Log);
 		PID_calc(0, 0);
 
 	} else {
@@ -327,7 +293,7 @@ void Gyro_calc(void) {
 				/ Gyro_Sensiviity_plus); //Vdd=3.3V,AD dps=4096,(2000dps),Sensivity=0.67mV/dps,
 	}
 
-	Gyrosita += Gyroomega / 1000;
+	Gyrotheta += Gyroomega / 1000;
 
 	if (GyroFlag == 1) {
 		GyroFCount++;
@@ -335,7 +301,7 @@ void Gyro_calc(void) {
 
 		if (GyroFCount == (2000 - 1)) {
 			Gyroheikin = addGyro / 2000;
-			Gyrosita = 0;
+			Gyrotheta = 0;
 			GyroFCount = 0;
 			GyroFlag = 0;
 
@@ -528,7 +494,7 @@ void main(void) {
 	Vl = 0;
 //Gyroの測定の初期化
 	Gyroheikin = 0;
-	Gyrosita = 0;
+	Gyrotheta = 0;
 	addGyro = 0;
 	GyroFCount = 0;
 
@@ -716,6 +682,7 @@ void main(void) {
 	while (PORT3.PIDR.BIT.B5 == 0)
 		;
 	Log_output(log_time, 5);
+	log_time++;
 //	MAP_output();
 
 	while (1) {

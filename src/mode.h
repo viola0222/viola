@@ -36,7 +36,7 @@ extern volatile int DkFlag, Dk_omega_Flag, Dk_omega_minas_Flag, Log_Flag,
 
 //verocity
 extern volatile float Vg, Vr, Vl, Xg, Xg_target, guruguru_X, addGyro,
-		Gyroheikin, Gyroomega, Gyrosita, ENComega, ENCsita;
+		Gyroheikin, Gyroomega, Gyrotheta, ENComega, ENCsita;
 
 extern volatile float ErrorG_I, ErrorG_P, ErroromegaG_I, ErroromegaG_P,
 		ControlG, ControlomegaG, ControlR, ControlL, ControlR_P, ControlL_P,

@@ -26,4 +26,6 @@ extern volatile int count_time, Log_Flag;
 int Log_memory(int, int, float*);
 int Log_output(int, int);
 
+void get_logs(int log_time, float data1, float data2, float data3, float data4, float data5, float data6);
+
 #endif /* GET_LOG_H_ */
