@@ -473,6 +473,12 @@ void main(void) {
 //		wait_ms(500);
 //	}
 
+	// 20240705 debug
+//	while (1) {
+//		myprintf("  %d,%d, %d,%d, %d,%d\n", MLeft.val, OFF_MLeft.val,
+//				Centre.val, OFF_Centre.val, MRight.val, OFF_MRight.val);
+//	}
+
 	while (1) {
 		mode_choice();
 	}

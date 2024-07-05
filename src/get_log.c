@@ -62,5 +62,5 @@ void get_logs(int log_time, float data1, float data2, float data3, float data4, 
 	Log[4] = data5;
 	Log[5] = data6;
 
-	Log_memory(log_time, 6, Log)
+	Log_memory(log_time, 6, Log);
 }

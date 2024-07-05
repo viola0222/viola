@@ -132,7 +132,7 @@ void Command_input(void) {
 			mode_rabit = 8;
 		}
 
-		if (mode_rabit > 9) {
+		if (mode_rabit > 8) {
 			mode_rabit = 1;
 		}
 
@@ -321,6 +321,8 @@ void mode_choice(void) {
 		while (PORT3.PIDR.BIT.B5 == 0)
 			;
 		Goal_Flag = 0;
+		output_maze_cost();
+		output_Path_maze_cost();
 		Path_Generater();
 		Path_print();
 //		Make_half_path();
@@ -370,8 +372,14 @@ void mode_choice(void) {
 		while (Goal_Flag == 0) {
  			Left_hands_getwall();
 		}
-// //		myprintf("Now Lefthand.\n");
+		while (PORT3.PIDR.BIT.B5 == 0)
+			;
+		output_maze_cost();
+		output_Path_maze_cost();
+//		Make_half_path();
+//		Path_largeturn_compress();
 		Path_Generater();
+		Path_print();
 		break;
 
 	case Fast:
@@ -417,18 +425,17 @@ void mode_choice(void) {
 		PORTA.PODR.BIT.B6 = 1;
 		wait_ms(200);
 
-//		while (1) {
-//			myprintf("  %d,%d, %d,%d, %d,%d\n", MLeft.val, OFF_MLeft.val,
-//					Centre.val, OFF_Centre.val, MRight.val, OFF_MRight.val);
-//			//		myprintf("%d, %d\n", MLeft.val, OFF_MLeft.val);
-//		}
+
 
 		Initialize();
 		Debug_Flag = 1;
 //		Log_Flag = 1;
 
 		while (PORT3.PIDR.BIT.B5 == 0) {
-			PID_calc(0, 0);
+//			PID_calc(0, 0);
+			myprintf("  %d,%d, %d,%d, %d,%d\n", MLeft.val, OFF_MLeft.val,
+					Centre.val, OFF_Centre.val, MRight.val, OFF_MRight.val);
+			//		myprintf("%d, %d\n", MLeft.val, OFF_MLeft.val);
 		}
 
 //		Linear_motion(720, 10000, 800, 0, 0);

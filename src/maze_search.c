@@ -23,7 +23,7 @@ extern unsigned short footmap[16][16];
 extern volatile int Here_X, Here_Y, Goal_Flag;
 int U_turn_Flag, U_turn_count, Circuit_Flag, Circuit_count;
 
-direction Past_compass, Now_compass;
+direction Past_compass = North, Now_compass = North;
 ///XXX aaa
 ///todo pa
 
@@ -370,18 +370,15 @@ void Adachi_method(void) {
 		return;
 	}
 	if ((get_wall(Here_X, Here_Y, God_direction(Now_compass, violaFront)) == 0)
-			&& (footmap[Here_X][Here_Y]
-					> footmap_distinction(Now_compass, violaFront))) {
-		/*前壁ないよ→直進だオラ*/
+			&& (footmap[Here_X][Here_Y]	> footmap_distinction(Now_compass, violaFront))) {
+		/*前壁なくて歩数が小さいとき→直進*/
 		U_turn_Flag = 0;
 
 		Linear_motion(180, 5000, 500, target_V, 500);
 
-	} else if ((get_wall(Here_X, Here_Y, God_direction(Now_compass, violaRight))
-			== 0)
-			&& (footmap[Here_X][Here_Y]
-					> footmap_distinction(Now_compass, violaRight))) {
-		/*前壁あるけど右壁ないよ→右に曲がるぞ*/
+	} else if ((get_wall(Here_X, Here_Y, God_direction(Now_compass, violaRight)) == 0)
+			&& (footmap[Here_X][Here_Y]	> footmap_distinction(Now_compass, violaRight))) {
+		/*右壁がなくて、右の歩数が小さいとき→右に曲がる*/
 		if (Past_compass == North) { //北向きから右折したよ
 			Now_compass = East;
 		} else if (Past_compass == East) { //東向きから右折したよ
@@ -395,11 +392,9 @@ void Adachi_method(void) {
 		Right_turn();
 		U_turn_Flag = 0;
 
-	} else if ((get_wall(Here_X, Here_Y, God_direction(Now_compass, violaLeft))
-			== 0)
-			&& (footmap[Here_X][Here_Y]
-					> footmap_distinction(Now_compass, violaLeft))) {
-		/*左壁がないぞ*/
+	} else if ((get_wall(Here_X, Here_Y, God_direction(Now_compass, violaLeft))	== 0)
+			&& (footmap[Here_X][Here_Y]	> footmap_distinction(Now_compass, violaLeft))) {
+		/*左壁がなくて、左の歩数が小さいとき→左に曲がる*/
 
 		if (Past_compass == North) { //北向きから左折したよ
 			Now_compass = West;
@@ -427,9 +422,15 @@ void Adachi_method(void) {
 
 void Left_hands_getwall(void) {
 	//なんてなめらかー
+	int tomato;
 	wall_distinction(Now_compass);
 	MAPCost_Memory();
-	Where_I_am();
+	tomato = Where_I_am();
+
+	if (tomato == 1) {
+		Goal_Flag = 1;
+		return;
+	}
 	if (MLeft.val < MLeft_thre) {
 		/*左壁isない*/
 		PORTA.PODR.BIT.B3 = 0;

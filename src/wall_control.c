@@ -56,7 +56,7 @@ float Wall_Control(void) {
 //		MRight.ref += 30;
 //	}
 
-	if (((MRight.val > MRight.threshold) && (MLeft.val > MLeft.threshold))) {
+	if ((MRight.val >= MRight.threshold) && (MLeft.val >= MLeft.threshold)) {
 		//両壁あるやで センサー値も下がってないやで
 
 		ErrorSenser_P = (MRight.val - MRight.ref) - (MLeft.val - MLeft.ref);
@@ -66,11 +66,11 @@ float Wall_Control(void) {
 
 		ErrorSenser_P = 0;
 
-	} else if (MRight.val > MRight.threshold) {
+	} else if (MRight.val >= MRight.threshold) {
 
 		ErrorSenser_P = 2 * (MRight.val - MRight.ref); // 右壁だけあるやで
 
-	} else {
+	} else if (MLeft.val >= MLeft.threshold) {
 		ErrorSenser_P = -2 * (MLeft.val - MLeft.ref); //左壁だけあるやで
 	}
 

@@ -166,8 +166,11 @@ void minimum_path_walk(volatile float V_Straight) {
 
 		if (compress_Root[apple] < 31) {
 			potato_pie = compress_Root[apple];
-			Linear_motion(90 * potato_pie, 5000, V_Straight, target_V, 500);
-
+			if (compress_Root[apple + 1] == 0){
+				Linear_motion(90 * potato_pie, 5000, V_Straight, target_V, 0);
+			} else {
+				Linear_motion(90 * potato_pie, 5000, V_Straight, target_V, 500);
+			}
 		} else if (compress_Root[apple] == 200) {
 			//右折
 			Right_turn();

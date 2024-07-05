@@ -9,7 +9,7 @@
 
 #define Hankei 12.53//12.5474
 #define Gearhi 3.33
-#define Vattery_Charge 7.8
+#define Vattery_Charge 7.0
 
 float Vattery(void) {
 	volatile int read;
